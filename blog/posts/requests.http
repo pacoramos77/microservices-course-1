@@ -1,0 +1,16 @@
+#GET
+
+GET http://localhost:4000/posts
+Content-Type: application/json
+###
+
+#POST
+
+POST http://localhost:4000/posts
+Content-Type: application/json
+
+{
+  "title": "new post"
+}
+
+###
