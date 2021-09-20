@@ -12,9 +12,12 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const events = [];
+
 app.post("/events", async (req, res) => {
-  const event = req.body;
   console.log("POST /events", req.body);
+  const event = req.body;
+  events.push(event);
 
   await Promise.all([
     sendEvent(URL_POSTS, event),
@@ -25,6 +28,11 @@ app.post("/events", async (req, res) => {
 
   res.send({ status: "OK" });
 });
+
+app.get("/events", (req, res) => {
+  console.log("GET /events", req.body);
+  res.send(events);
+})
 
 app.listen(PORT, () => {
   console.log(`Listening port ${PORT}, (Event-bus service)`);
