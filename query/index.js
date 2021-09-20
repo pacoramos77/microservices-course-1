@@ -9,30 +9,16 @@ app.use(express.json());
 app.use(cors());
 
 const posts = {};
-/* QUICK EXAMPLE
-posts = {
-  'post-1': {
-    id: 'post-1',
-    title: 'post title',
-    comments: [
-      { id: 'post1-comment1', content: 'comment!' }
-    ]
-  },
-  'post-2': {
-    id: 'post-2',
-    title: 'post title',
-    comments: [
-      { id: 'post2-comment1', content: 'comment!' }
-    ]
-  }
-}
-*/
+
+
 app.get('/posts', (req, res) => {
+  console.log(`GET /posts`, req.body);
   res.send(posts);
 });
 
 app.post('/events', (req, res) => {
-  const { type, data} = req.body;
+  console.log(`POST /events`, req.body);
+  const { type, data } = req.body;
 
   if (type === 'PostCreated') {
     const { id, title } = data;
@@ -41,16 +27,22 @@ app.post('/events', (req, res) => {
   }
 
   if (type == 'CommentCreated') {
-    const { id, content, postId } = data;
+    const { id, content, postId, status } = data;
     const post = posts[postId];
 
-    post.comments.push({ id, content });
+    post.comments.push({ id, content, status });
   }
 
-  console.log(posts);
+  if (type === 'CommentUpdated') {
+    const { id, content, postId, status } = data;
+    const post = posts[postId];
+    const comment = post.comments.find(comment => comment.id === id);
 
+    comment.status = status;
+    comment.conent = content;
+  }
 });
 
 app.listen(PORT, () => {
-  console.log('Listening on ', PORT)
+  console.log('Listening on ', PORT, '(Query service)')
 });

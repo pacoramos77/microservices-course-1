@@ -1,5 +1,4 @@
 const express = require("express");
-// const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 const cors = require("cors");
 const axios = require("axios");
@@ -7,7 +6,6 @@ const axios = require("axios");
 const PORT = 4000;
 
 const app = express();
-// app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
@@ -15,10 +13,12 @@ app.use(cors());
 const posts = {};
 
 app.get("/posts", (req, res) => {
+  console.log(`GET /posts`, req.body);
   res.send(posts);
 });
 
 app.post("/posts", async (req, res) => {
+  console.log(`POST /posts`, req.body);
   const id = randomBytes(4).toString("hex");
   const { title } = req.body;
 
@@ -26,8 +26,6 @@ app.post("/posts", async (req, res) => {
     id,
     title,
   };
-
-  console.log(id, posts[id]);
 
   await axios
     .post("http://localhost:4005/events", {
@@ -43,10 +41,10 @@ app.post("/posts", async (req, res) => {
 });
 
 app.post("/events", (req, res) => {
-  console.log("Received event", req.body.type);
+  console.log(`POST /events`, req.body);
   res.send({});
 });
 
 app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
+  console.log(`Listening on ${PORT} (Posts service)`);
 });
