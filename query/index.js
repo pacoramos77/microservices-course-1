@@ -11,40 +11,38 @@ app.use(cors());
 
 const posts = {};
 
-
-app.get('/posts', (req, res) => {
+app.get("/posts", (req, res) => {
   console.log(`GET /posts`, req.body);
   res.send(posts);
 });
 
 const handleEvent = (type, data) => {
-  
   console.log(`handleEvent`, type, data);
 
-  if (type === 'PostCreated') {
+  if (type === "PostCreated") {
     const { id, title } = data;
 
     posts[id] = { id, title, comments: [] };
   }
 
-  if (type == 'CommentCreated') {
+  if (type == "CommentCreated") {
     const { id, content, postId, status } = data;
     const post = posts[postId];
 
     post.comments.push({ id, content, status });
   }
 
-  if (type === 'CommentUpdated') {
+  if (type === "CommentUpdated") {
     const { id, content, postId, status } = data;
     const post = posts[postId];
-    const comment = post.comments.find(comment => comment.id === id);
+    const comment = post.comments.find((comment) => comment.id === id);
 
     comment.status = status;
     comment.conent = content;
   }
 };
 
-app.post('/events', (req, res) => {
+app.post("/events", (req, res) => {
   console.log(`POST /events`);
   const { type, data } = req.body;
 
@@ -53,14 +51,14 @@ app.post('/events', (req, res) => {
 });
 
 app.listen(PORT, async () => {
-  console.log('Listening on ', PORT, '(Query service)');
+  console.log("Listening on ", PORT, "(Query service)");
 
   try {
-    const res = await axios.get("http://localhost:4005/events");
- 
+    const res = await axios.get("http://event-bus-srv:4005/events");
+
     for (let event of res.data) {
       console.log("Processing event:", event);
- 
+
       handleEvent(event.type, event.data);
     }
   } catch (error) {

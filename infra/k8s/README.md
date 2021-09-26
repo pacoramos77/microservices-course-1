@@ -26,3 +26,10 @@ https://minikube.sigs.k8s.io/docs/handbook/kubectl/
 
 
 https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+
+
+# force a deployment
+```
+kubectl rollout restart deployment posts
+```
+

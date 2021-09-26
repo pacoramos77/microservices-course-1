@@ -1,14 +1,15 @@
-@postsBaseUrl = http://localhost:4000
-@commentsBaseUrl = http://localhost:4001
+# 127.0.0.1 redirected to posts.com in etc/hosts file
+@url = http://posts.com 
+
 
 
 # POSTS
 
-GET {{postsBaseUrl}}/posts
+GET {{url}}/posts
 Content-Type: application/json
 ###
 
-POST {{postsBaseUrl}}/posts
+POST {{url}}/posts
 Content-Type: application/json
 
 {
@@ -19,11 +20,11 @@ Content-Type: application/json
 
 # COMMENTS
 
-GET {{commentsBaseUrl}}/posts/123/comments
+GET {{url}}/posts/123/comments
 Content-Type: application/json
 ###
 
-POST {{commentsBaseUrl}}/posts/123/comments
+POST {{url}}/posts/123/comments
 Content-Type: application/json
 
 {
